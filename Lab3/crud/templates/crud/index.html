@@ -1,0 +1,27 @@
+{% extends 'crud/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-6">
+      <table class="table table-hover table-bordered table-responsive">
+        <caption>
+            <h3>Producers</h3>
+        </caption>
+        <thead>
+            <!--<th>#</th>-->
+            <th>Title</th>
+            <th>Country</th>
+        </thead>
+        <tbody>
+            {%  for producers in response.producers %}
+                <tr>
+                    <td>{{ producers.title }}</td>
+                    <td>{{  producers.country }} </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+  </div>
+</div>
+
+
+{% endblock %}

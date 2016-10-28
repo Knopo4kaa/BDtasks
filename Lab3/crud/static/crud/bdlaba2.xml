@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shop>
+    <providers>
+        <provider title="Apple" country="USA"/>
+        <provider title="Samsung" country="South Korea"/>
+        <provider title="Lenovo" country="China"/>
+        <provider title="Nokia" country="Finland"/>
+    </providers>
+    <products>
+        <product producer_id="1" title="Iphone 5" bestseller = "false" description="nice" price="15000"/>
+        <product producer_id="2" title="Samsung Galaxy s6" bestseller="false" description="good" price="12000"/>
+        <product producer_id="3" title="Lenovo A820" bestseller = "true" description="good touchscreen" price="9000"/>
+        <product producer_id="1" title="Iphone 6s" bestseller="false" description="nice look" price="18000"/>
+        <product producer_id="4" title="Nokia 6230i" bestseller="false" description="big phone" price="8000"/>
+    </products>
+</shop>

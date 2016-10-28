@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shop>
+    <providers>
+        <provider title="Apple" country="USA"/>
+        <provider title="Samsung" country="South Korea"/>
+        <provider title="Lenovo" country="China"/>
+        <provider title="Nokia" country="Finland"/>
+    </providers>
+    <products>
+        <product producer_id="1" title="Iphone 5" bestseller = "0" description="nice" price="15000"/>
+        <product producer_id="2" title="Samsung Galaxy s6" bestseller= "1" description="good" price="12000"/>
+        <product producer_id="3" title="Lenovo A820" bestseller = "1" description="good touchscreen" price="9000"/>
+        <product producer_id="1" title="Nokia Lumia" bestseller= "1" description="nice look" price="18000"/>
+        <product producer_id="4" title="Nokia 6230i" bestseller= "0" description="big phone" price="8000"/>
+    </products>
+    <clients>
+        <client username="Erik" location="Ukraine"/>
+        <client username="Kolya" location="Russia"/>
+        <client username="Mark" location="USA"/>
+    </clients>
+</shop>

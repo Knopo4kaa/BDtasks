@@ -1,0 +1,193 @@
+{% extends 'myapp/base.html' %}
+{% load filters %}
+{% block content %}
+<div class="row">
+      <table class="table table-hover table-bordered table-responsive">
+        <caption>
+            <h3>Orders</h3>
+        </caption>
+        <thead>
+            <th>#</th>
+            <th>Client</th>
+            <th>Product</th>
+            <th>Date</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {%  for order in response.orders %}
+                <tr>
+                    <td> {{forloop.counter}} </td>
+                    <td> {{ order.client.name }} </td>
+                    <td>
+                        {%  for product in order.product %}
+                            {{ product.title }} <br>
+                        {% endfor %}
+                    </td>
+                    <td> {{ order.date }} </td>
+                    <td>
+                        <form action="delete_order" method="POST">{% csrf_token %}
+                            <button name="order_to_delete" value='{{ order|private:"_id"}}' type="submit" class="btn btn-default" style="">Delete order</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+
+</div>
+<div class="container">
+    <div class="col-md-12">
+    <div class="col-md-6">
+        <h2>Make order</h2>
+        <form action="make_order" method="POST" class="form-inline" style="height: auto;">{% csrf_token %}
+            <div class="col-md-4" >
+              <label for="client_id" style="font-size: 18px; margin-top: 4px">Name:</label><br>
+              <label style="font-size: 18px; margin-top: 6px">Product</label><br>
+              <!--<label for="countid" style="font-size: 18px; margin-top: 3px" id="count_label">Count:</label><br>-->
+            </div>
+            <div class="col-md-6">
+                <select id="client_id" name="client_id" style="width: 200px;height: 30px; border-radius: 5px">
+                    {%  for client in response.clients %}
+                        <option value="{{ client|private:'_id' }}" >{{client.name}}</option>
+                    {% endfor %}
+                </select>
+                <div class="products">
+                    <select class="product_item" name="product_id" style="margin-top:2%;width: 200px;height: 30px; border-radius: 5px">
+                        {%  for product in response.products %}
+                            <option value="{{ product|private:'_id' }}" >{{product.title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!--<input type="number" class="form-control" name="count" id="countid" style="margin-top:2%;">-->
+            </div>
+            <div class="col-md-1" style="margin-top: 3.5%;">
+                <h3 style="cursor: pointer" id="add_product">+</h3>
+            </div>
+            <div class="col-md-1" style="margin-top: 3.5%;">
+                <h3 style="cursor: pointer" id="remove_product">-</h3>
+            </div>
+            <div class="col-md-10" style="margin-top: 10px">
+                <button type="submit" class="btn btn-default">Make order</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h2>Edit order</h2>
+        <form action="edit_order" method="POST" class="form-inline" style="height: auto;">{% csrf_token %}
+            <div class="col-md-4" >
+              <label for="order_id" style="font-size: 18px;">Number:</label><br>
+              <label style="font-size: 18px; margin-top: 6%;">Name:</label><br>
+              <label style="font-size: 18px; margin-top: 6%;">Product</label><br>
+              <!--<label for="newcointid" style="font-size: 18px; margin-top: 6%;">Count:</label><br>-->
+          </div>
+          <div class="col-md-6">
+              <select id="order_id" name="order_id" style="width: 200px;height: 30px; border-radius: 5px">
+                  {%  for order in response.orders %}
+                  <option value="{{ order|private:'_id' }}" >{{forloop.counter}}</option>
+                  {% endfor %}
+              </select>
+              <select name="client_id" style="margin-top: 2%;width: 200px;height: 30px; border-radius: 5px">
+                  {%  for client in response.clients %}
+                    <option value="{{ client|private:'_id' }}" >{{client.name}}</option>
+                  {% endfor %}
+              </select>
+              <div class="products_to_edit">
+                  <select class="product_item_to_edit" name="product_id" style="margin-top: 2%;width: 200px;height: 30px; border-radius: 5px">
+                    {%  for product in response.products %}
+                        <option value="{{ product|private:'_id' }}" >{{product.title}}</option>
+                    {% endfor %}
+                  </select>
+              </div>
+
+              <!--<input type="number" class="form-control" name="count" id="newcointid" style="margin-top: 2%">-->
+          </div>
+            <div class="col-md-1" style="margin-top: 10%;">
+                <h3 style="cursor: pointer" id="add_product_to_edit">+</h3>
+            </div>
+            <div class="col-md-1" style="margin-top: 10%;">
+                <h3 style="cursor: pointer" id="remove_product_to_edit">-</h3>
+            </div>
+            <div class="col-md-10" style="margin-top: 10px">
+                <button type="submit" class="btn btn-default">Save to database</button>
+            </div>
+        </form>
+    </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <form action="/" method="POST" class="form-inline" style="height: auto;">{% csrf_token %}
+                <button type="submit" class="btn btn-default">Count up all orders and analize products</button>
+            </form>
+             {% if response.results_of_orders%}
+                <h2>Purchase amount : </h2>
+                {% for result in response.results_of_orders%}
+                    <h3>Client: {{result|private:"_id"}} - {{result.value}}$</h3>
+                {% endfor %}
+                <h2>Orders statistics: </h2>
+                {% for product in response.results_of_buying%}
+                    <h3>Date: {{product|private:"_id"}} - {{product.value}} orders</h3>
+                {% endfor %}
+                <h2>Products statistics: </h2>
+                {% for product in response.results_of_products%}
+                    <h3>Product: {{product|private:"_id"}} - {{product.count}} times</h3>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var margin = 3;
+        var count = 1;
+        $('#remove_product').click(function () {
+            if (count > 1){
+                margin-=33;
+                $('.product_item:last-child').remove();
+                count--;
+            }
+        });
+
+        $('#add_product').click(function () {
+            count++;
+            margin+=33;
+            $('.products').append('<select class="product_item" name="product_id" style="margin-top:2%;width: 200px;height: 30px; border-radius: 5px">\
+                    {%  for product in response.products %}\
+                        <option value="{{ product|private:'_id' }}" >{{product.title}}</option>\
+                    {% endfor %}\
+                </select>');
+
+
+        });
+
+        var margin_to_edit = 3;
+        var count_to_edit = 1;
+        $('#remove_product_to_edit').click(function () {
+            if (count_to_edit > 1){
+                margin_to_edit-=33;
+                $('.product_item_to_edit:last-child').remove();
+                count_to_edit--;
+            }
+        });
+
+        $('#add_product_to_edit').click(function () {
+            count_to_edit++;
+            margin_to_edit+=33;
+            $('.products_to_edit').append('<select class="product_item_to_edit" name="product_id" style="margin-top:2%;width: 200px;height: 30px; border-radius: 5px">\
+                    {%  for product in response.products %}\
+                        <option value="{{ product|private:'_id' }}" >{{product.title}}</option>\
+                    {% endfor %}\
+                </select>');
+
+
+        });
+
+    });
+</script>
+
+
+
+{% endblock %}
