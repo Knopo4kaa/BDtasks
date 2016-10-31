@@ -18,7 +18,7 @@
             </form>
         </caption>
         <thead>
-            <!--<th>#</th>-->
+            <th>#</th>
             <th>Title</th>
             <!--<th>Bestseller</th>-->
             <!--<th>Description</th>-->
@@ -31,6 +31,7 @@
         <tbody>
             {%  for product in response.products %}
                 <tr>
+                    <td> {{ forloop.counter }}</td>
                     <td> {{ product.title }} </td>
                     <td> {{  product.price }} </td>
                     <td> {{ product.producer.title }} </td>

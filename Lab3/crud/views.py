@@ -10,6 +10,7 @@ cache = Cache()
 
 
 def orders(request):
+    # page_number = int(page_number)
     orders_ = [order for order in database.db.Order.find().limit(50)]
     clients = [order for order in database.db.Client.find()]
     products = [order for order in database.db.Product.find().limit(50)]

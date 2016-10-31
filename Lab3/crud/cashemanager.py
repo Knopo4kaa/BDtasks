@@ -20,16 +20,15 @@ class Cache:
 				self.r.sadd(word, index)
 
 	def cache_data(self, key, data):
-		changed_products = []
 		for document in data:
-			document.pop('_id', None)
-			document['producer'].pop('_id', None)
-			changed_products.append(json.dumps(document))
-		self.r.sadd(key, *changed_products)
+			document['_id'] = str(document['_id'])
+			document['producer']['_id'] = str(document['producer']['_id'])
+			json_doc = json.dumps(document)
+			self.r.sadd(key, json_doc)
 
 	def clear_cache(self, product):
-		product.pop('_id', None)
-		product['producer'].pop('_id', None)
+		product['_id'] = str(product['_id'])
+		product['producer']['_id'] = str(product['producer']['_id'])
 		product = json.dumps(product)
 		for key in self.r.scan(0)[1]:
 			if product in list(self.r.smembers(key)):
