@@ -41,7 +41,7 @@ def products_page(request):
 
         # words = set(product_title.split(' '))
         t0 = datetime.now()
-        products = cache.search(product_title)
+        products = cache.search('products', product_title)
         dt1 = datetime.now() - t0
 
         if not products:
@@ -49,14 +49,10 @@ def products_page(request):
             products = database.search_products(product_title)
             dt2 = datetime.now() - t0
             if products:
-                cache.cache_data(product_title, products)
+                cache.cache_data('products', product_title, products)
                 print ('Loaded from database!')
                 print ("Database search: {}".format(dt2.total_seconds()))
         else:
-            json_products = []
-            for product in products:
-                json_products.append(json.loads(product))
-            products = json_products
             print ('Loaded from cache!')
             print ("Cache search: {}".format(dt1.total_seconds()))
         search = True
@@ -91,5 +87,5 @@ def delete_product(request):
         if request.POST["product_to_delete"]:
             product_id = request.POST['product_to_delete']
             product = database.delete_product(product_id)
-            cache.clear_cache(product)
+            cache.clear_cache('products', product)
         return HttpResponseRedirect('/products')

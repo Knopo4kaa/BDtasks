@@ -71,7 +71,7 @@ class Database:
 		self.db.Order.insert(order)
 
 	def delete_order(self, order_id):
-		self.db.Order.delete_one({'_id':ObjectId(order_id)})
+		self.db.Order.delete_one({'_id': ObjectId(order_id)})
 
 	def delete_product(self, product_id):
 		deleted_product = self.db.Product.find_one({'_id': ObjectId(product_id)})
